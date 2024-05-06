@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import logo from '../assets/images/logo.png';
 import { AuthContext } from '../provider/AuthProvider';
+import { NavLink } from 'react-router-dom';
 
 const Header = () => {
   const { user } = useContext(AuthContext);
@@ -15,12 +16,12 @@ const Header = () => {
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <div>Home</div>
+            <NavLink to={'/'}>Home</NavLink>
           </li>
 
           {!user && (
             <li>
-              <div>Login</div>
+              <NavLink to={'/login'}>Login</NavLink>
             </li>
           )}
         </ul>
