@@ -3,6 +3,7 @@ import bgImg from '../assets/images/register.jpg';
 import logo from '../assets/images/logo.png';
 import { useContext } from 'react';
 import { AuthContext } from '../provider/AuthProvider';
+import toast from 'react-hot-toast';
 
 const Register = () => {
   const { createUser, updateUserProfile, user, setUser } = useContext(AuthContext);
@@ -20,6 +21,13 @@ const Register = () => {
       console.log(result);
       await updateUserProfile(name, photo);
       setUser({ ...user, photoURL: photo, displayName: name });
+      toast.success('Sign-up Successful', {
+        style: {
+          borderRadius: '10px',
+          background: '#333',
+          color: '#fff',
+        },
+      });
     } catch (err) {
       console.log(err);
     }
