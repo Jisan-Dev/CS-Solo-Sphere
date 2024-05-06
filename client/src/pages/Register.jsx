@@ -26,6 +26,7 @@ const Register = () => {
           borderRadius: '10px',
           background: '#333',
           color: '#fff',
+          padding: '14px 20px',
         },
       });
     } catch (err) {

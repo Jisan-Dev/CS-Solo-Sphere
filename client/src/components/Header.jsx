@@ -2,9 +2,21 @@ import { useContext } from 'react';
 import logo from '../assets/images/logo.png';
 import { AuthContext } from '../provider/AuthProvider';
 import { NavLink } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const Header = () => {
-  const { user } = useContext(AuthContext);
+  const { user, logOut } = useContext(AuthContext);
+  const handleLogout = async () => {
+    await logOut();
+    toast.success('logged out successfully', {
+      style: {
+        borderRadius: '10px',
+        background: '#333',
+        padding: '14px 20px',
+        color: '#fff',
+      },
+    });
+  };
   return (
     <div className="navbar bg-base-100 shadow-sm container px-4 mx-auto">
       <div className="flex-1">
@@ -47,7 +59,9 @@ const Header = () => {
                 <div>Bid Requests</div>
               </li>
               <li className="mt-2">
-                <button className="bg-gray-200 block text-center">Logout</button>
+                <button onClick={handleLogout} className="bg-gray-200 block text-center">
+                  Logout
+                </button>
               </li>
             </ul>
           </div>
