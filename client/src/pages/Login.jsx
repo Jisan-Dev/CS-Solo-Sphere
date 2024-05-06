@@ -6,7 +6,7 @@ import { AuthContext } from '../provider/AuthProvider';
 import toast from 'react-hot-toast';
 
 const Login = () => {
-  const { signIn } = useContext(AuthContext);
+  const { signIn, signInWithGoogle } = useContext(AuthContext);
   const handleSignIn = async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -17,6 +17,29 @@ const Login = () => {
       const result = await signIn(email, password);
       console.log(result);
       toast.success('logged in successfully', {
+        style: {
+          borderRadius: '10px',
+          background: '#333',
+          color: '#fff',
+          padding: '14px 20px',
+        },
+      });
+    } catch (err) {
+      toast.error(err.code, {
+        style: {
+          borderRadius: '10px',
+          background: '#333',
+          color: '#fff',
+          padding: '14px 20px',
+        },
+      });
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithGoogle();
+      toast.success('Signed in Successful', {
         style: {
           borderRadius: '10px',
           background: '#333',
@@ -52,7 +75,9 @@ const Login = () => {
 
           <p className="mt-3 text-xl text-center text-gray-600 ">Welcome back!</p>
 
-          <div className="flex cursor-pointer items-center justify-center mt-4 text-gray-600 transition-colors duration-300 transform border rounded-lg   hover:bg-gray-50 ">
+          <div
+            onClick={handleGoogleSignIn}
+            className="flex cursor-pointer items-center justify-center mt-4 text-gray-600 transition-colors duration-300 transform border rounded-lg   hover:bg-gray-50 ">
             <div className="px-4 py-2">
               <svg className="w-6 h-6" viewBox="0 0 40 40">
                 <path
