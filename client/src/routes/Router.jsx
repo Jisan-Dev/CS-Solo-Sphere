@@ -3,6 +3,7 @@ import Root from './Root';
 import Home from '../pages/home';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
+import JobDetails from '../pages/job-details';
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: '/register',
         element: <Register />,
+      },
+      {
+        path: '/jobs/:id',
+        element: <JobDetails />,
       },
     ],
   },
