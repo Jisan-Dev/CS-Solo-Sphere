@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import logo from '../assets/images/logo.png';
 import { AuthContext } from '../provider/AuthProvider';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 const Header = () => {
@@ -20,10 +20,10 @@ const Header = () => {
   return (
     <div className="navbar bg-base-100 shadow-sm container px-4 mx-auto">
       <div className="flex-1">
-        <div className="flex gap-2 items-center">
-          <img className="w-auto h-7" src={logo} />
-          <span className="font-bold">SoloSphere</span>
-        </div>
+        <Link to={'/'} className="flex gap-2 items-center">
+          <img className="w-auto h-12" src={logo} />
+          <span className="font-black text-2xl underline">SoloSphere</span>
+        </Link>
       </div>
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1">
