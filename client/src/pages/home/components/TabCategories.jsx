@@ -2,8 +2,20 @@
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import JobCard from './JobCard';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const TabCategories = ({ jobs }) => {
+const TabCategories = () => {
+  const [jobs, setJobs] = useState([]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const { data } = await axios(`${import.meta.env.VITE_API_URL}/jobs`);
+      setJobs(data);
+    };
+    getData();
+  }, []);
+
   return (
     <div className="my-10 container px-4 mx-auto">
       <h1 className="text-2xl font-semibold text-center text-gray-800 capitalize lg:text-3xl ">Browse Jobs By Categories</h1>
