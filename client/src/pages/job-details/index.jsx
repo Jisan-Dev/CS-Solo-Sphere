@@ -4,6 +4,7 @@ import { AuthContext } from '../../provider/AuthProvider';
 import toast from 'react-hot-toast';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import axios from 'axios';
 
 const JobDetails = () => {
   const [startDate, setStartDate] = useState(new Date());
@@ -11,7 +12,10 @@ const JobDetails = () => {
   const job = useLoaderData();
   const { _id, job_title, description, deadline, category, min_price, max_price, buyer_email } = job || {};
 
-  const handleFormSubmission = (event) => {
+  const handleFormSubmission = async (event) => {
+    if (buyer_email === user?.email) {
+      return toast.error('You cannot bid on your own job.');
+    }
     event.preventDefault();
     const form = event.target;
     const jobId = _id;
@@ -24,7 +28,31 @@ const JobDetails = () => {
     const status = 'Pending';
 
     const bidData = { jobId, price, email, deadline, comment, status, job_title, category, buyer_email };
-    console.table(bidData);
+
+    try {
+      const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/bid`, bidData);
+      if (data.insertedId) {
+        toast.success('Bid Placed Successfully', {
+          style: {
+            borderRadius: '10px',
+            background: '#333',
+            color: '#fff',
+            padding: '14px 20px',
+          },
+        });
+        form.reset();
+      }
+    } catch (error) {
+      toast.error(error.message, {
+        style: {
+          borderRadius: '10px',
+          background: '#333',
+          color: '#fff',
+          padding: '14px 20px',
+        },
+      });
+      console.log(error);
+    }
   };
 
   return (
