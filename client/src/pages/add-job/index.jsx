@@ -4,10 +4,12 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { AuthContext } from '../../provider/AuthProvider';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const AddJob = () => {
   const [startDate, setStartDate] = useState(new Date());
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -36,6 +38,8 @@ const AddJob = () => {
             padding: '14px 20px',
           },
         });
+        form.reset();
+        navigate('/my-posted-jobs');
       }
     } catch (err) {
       console.log(err);

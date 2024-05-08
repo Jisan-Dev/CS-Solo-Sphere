@@ -60,7 +60,9 @@ const JobDetails = () => {
       {/* Job Details */}
       <div className="flex-1  px-4 py-7 bg-white rounded-md shadow-md md:min-h-[350px]">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-light text-gray-800 ">Deadline: {new Date(deadline).toLocaleDateString('en-GB')}</span>
+          <span className="text-sm font-light text-gray-800 ">
+            Deadline: <strong className="font-bold">{new Date(deadline).toDateString()}</strong>
+          </span>
           <span className="px-4 py-1 text-xs text-blue-800 uppercase bg-blue-200 rounded-full ">{category}</span>
         </div>
 

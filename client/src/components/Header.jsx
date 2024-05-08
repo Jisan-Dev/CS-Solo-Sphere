@@ -52,13 +52,13 @@ const Header = () => {
                 </NavLink>
               </li>
               <li>
-                <div>My Posted Jobs</div>
+                <NavLink to="/my-posted-jobs">My Posted Jobs</NavLink>
               </li>
               <li>
-                <div>My Bids</div>
+                <NavLink to="/my-bids">My Bids</NavLink>
               </li>
               <li>
-                <div>Bid Requests</div>
+                <NavLink to="/bid-requests">Bid Requests</NavLink>
               </li>
               <li className="mt-2">
                 <button onClick={handleLogout} className="bg-gray-200 block text-center">
