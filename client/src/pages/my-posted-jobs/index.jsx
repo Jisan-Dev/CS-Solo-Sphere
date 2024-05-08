@@ -11,24 +11,11 @@ const MyPostedJobs = () => {
     axios.get(`${import.meta.env.VITE_API_URL}/my-jobs?email=${user?.email}`).then((data) => setJobs(data.data));
   }, [user]);
 
-  const handleDelete = (id) => {
-    axios
-      .delete(`${import.meta.env.VITE_API_URL}/jobs/${id}`)
-      .then((data) => {
-        if (data.data.deletedCount > 0) {
-          toast.success('Deleted Successfully', {
-            style: {
-              borderRadius: '10px',
-              background: '#333',
-              padding: '14px 20px',
-              color: '#fff',
-            },
-          });
-          setJobs(jobs.filter((job) => job._id !== id));
-        }
-      })
-      .catch((error) => {
-        toast.error(error.message, {
+  const handleDelete = async (id) => {
+    try {
+      const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}/jobs/${id}`);
+      if (data.deletedCount > 0) {
+        toast.success('Deleted Successfully', {
           style: {
             borderRadius: '10px',
             background: '#333',
@@ -36,7 +23,18 @@ const MyPostedJobs = () => {
             color: '#fff',
           },
         });
+        setJobs(jobs.filter((job) => job._id !== id));
+      }
+    } catch (error) {
+      toast.error(error.message, {
+        style: {
+          borderRadius: '10px',
+          background: '#333',
+          padding: '14px 20px',
+          color: '#fff',
+        },
       });
+    }
   };
 
   return (
