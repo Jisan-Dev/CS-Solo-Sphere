@@ -10,13 +10,20 @@ const JobDetails = () => {
   const [startDate, setStartDate] = useState(new Date());
   const { user } = useContext(AuthContext);
   const job = useLoaderData();
-  const { _id, job_title, description, deadline, category, min_price, max_price, buyer_email } = job || {};
+  const { _id, job_title, description, deadline, category, min_price, max_price, buyer } = job || {};
 
   const handleFormSubmission = async (event) => {
-    if (buyer_email === user?.email) {
-      return toast.error('You cannot bid on your own job.');
-    }
     event.preventDefault();
+    if (buyer?.email === user?.email) {
+      return toast.error('You cannot bid on your own job.', {
+        style: {
+          borderRadius: '10px',
+          background: '#333',
+          color: '#fff',
+          padding: '14px 20px',
+        },
+      });
+    }
     const form = event.target;
     const jobId = _id;
     const price = parseFloat(form.price.value);
@@ -27,7 +34,7 @@ const JobDetails = () => {
     const deadline = startDate;
     const status = 'Pending';
 
-    const bidData = { jobId, price, email, deadline, comment, status, job_title, category, buyer_email };
+    const bidData = { jobId, price, email, buyer_email: buyer?.email, deadline, comment, status, job_title, category, buyer };
 
     try {
       const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/bid`, bidData);
@@ -56,7 +63,7 @@ const JobDetails = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row justify-around gap-5  items-center min-h-[calc(100vh-306px)] md:max-w-screen-xl mx-auto ">
+    <div className="flex flex-col md:flex-row justify-around gap-5  items-center min-h-[calc(100vh-306px)] md:max-w-screen-xl mx-auto my-10">
       {/* Job Details */}
       <div className="flex-1  px-4 py-7 bg-white rounded-md shadow-md md:min-h-[350px]">
         <div className="flex items-center justify-between">
@@ -73,11 +80,11 @@ const JobDetails = () => {
           <p className="mt-6 text-sm font-bold text-gray-600 ">Buyer Details:</p>
           <div className="flex items-center gap-5">
             <div>
-              <p className="mt-2 text-sm  text-gray-600 ">Name: Jhankar Vai.</p>
-              <p className="mt-2 text-sm  text-gray-600 ">Email: jhankar@mahbub.com</p>
+              <p className="mt-2 text-sm  text-gray-600 ">Name: {buyer?.displayName}</p>
+              <p className="mt-2 text-sm  text-gray-600 ">Email: {buyer?.email}</p>
             </div>
             <div className="rounded-full object-cover overflow-hidden w-14 h-14">
-              <img src="" alt="" />
+              <img src={buyer?.photoURL} alt="" />
             </div>
           </div>
           <p className="mt-6 text-lg font-bold text-gray-600 ">
