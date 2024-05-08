@@ -44,6 +44,13 @@ async function run() {
       res.send(job);
     });
 
+    // save a job in db
+    app.post('/add-job', async (req, res) => {
+      const jobData = req.body;
+      const result = await jobsCollection.insertOne(jobData);
+      res.send(result);
+    });
+
     // save a bid data in db
     app.post('/bid', async (req, res) => {
       const bidData = req.body;

@@ -1,10 +1,61 @@
+import { useContext, useState } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { AuthContext } from '../../provider/AuthProvider';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+
 const AddJob = () => {
+  const [startDate, setStartDate] = useState(new Date());
+  const { user } = useContext(AuthContext);
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    const jobData = Object.fromEntries(formData.entries());
+    jobData.min_price = parseFloat(jobData.min_price);
+    jobData.max_price = parseFloat(jobData.max_price);
+    jobData.deadline = startDate;
+    // const jobData = {
+    jobData.buyer = {
+      email: user?.email,
+      photoURL: user?.photoURL,
+      displayName: user?.displayName,
+    };
+    console.log('jobdata', jobData);
+    try {
+      const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/add-job`, jobData);
+      console.log(data);
+      if (data.insertedId) {
+        toast.success('Job added successfully', {
+          style: {
+            borderRadius: '10px',
+            background: '#333',
+            color: '#fff',
+            padding: '14px 20px',
+          },
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(err.code, {
+        style: {
+          borderRadius: '10px',
+          background: '#333',
+          color: '#fff',
+          padding: '14px 20px',
+        },
+      });
+    }
+  };
+
   return (
     <div className="flex justify-center items-center min-h-[calc(100vh-306px)] my-12">
       <section className=" p-2 md:p-6 mx-auto bg-white rounded-md shadow-md ">
         <h2 className="text-lg font-semibold text-gray-700 capitalize ">Post a Job</h2>
 
-        <form>
+        <form onSubmit={handleFormSubmit}>
           <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
             <div>
               <label className="text-gray-700" htmlFor="job_title">
@@ -26,14 +77,23 @@ const AddJob = () => {
                 id="emailAddress"
                 type="email"
                 name="email"
-                disabled
-                className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md  focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring"
+                // disabled
+                readOnly
+                defaultValue={user?.email}
+                className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md  focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring cursor-not-allowed"
               />
             </div>
             <div className="flex flex-col gap-2">
               <label className="text-gray-700">Deadline</label>
 
               {/* Date Picker Input Field */}
+              <DatePicker
+                className="border p-2 rounded-md w-full focus:border-slate-400 focus:ring focus:ring-slate-300 focus:ring-opacity-40  focus:outline-none"
+                selected={startDate}
+                dateFormat="dd/MM/yyyy"
+                name="deadline"
+                onChange={(date) => setStartDate(date)}
+              />
             </div>
 
             <div className="flex flex-col gap-2">
