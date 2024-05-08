@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../provider/AuthProvider';
+import toast from 'react-hot-toast';
 
 const MyPostedJobs = () => {
   const { user } = useContext(AuthContext);
@@ -9,6 +10,35 @@ const MyPostedJobs = () => {
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_API_URL}/my-jobs?email=${user?.email}`).then((data) => setJobs(data.data));
   }, [user]);
+
+  const handleDelete = (id) => {
+    axios
+      .delete(`${import.meta.env.VITE_API_URL}/jobs/${id}`)
+      .then((data) => {
+        if (data.data.deletedCount > 0) {
+          toast.success('Deleted Successfully', {
+            style: {
+              borderRadius: '10px',
+              background: '#333',
+              padding: '14px 20px',
+              color: '#fff',
+            },
+          });
+          setJobs(jobs.filter((job) => job._id !== id));
+        }
+      })
+      .catch((error) => {
+        toast.error(error.message, {
+          style: {
+            borderRadius: '10px',
+            background: '#333',
+            padding: '14px 20px',
+            color: '#fff',
+          },
+        });
+      });
+  };
+
   return (
     <section className="container px-4 mx-auto pt-12">
       <div className="flex items-center gap-x-3">
@@ -74,7 +104,7 @@ const MyPostedJobs = () => {
                       </td>
                       <td className="px-4 py-4 text-sm whitespace-nowrap">
                         <div className="flex items-center gap-x-6">
-                          <button className="text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none">
+                          <button onClick={() => handleDelete(job?._id)} className="text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
                               <path
                                 strokeLinecap="round"
