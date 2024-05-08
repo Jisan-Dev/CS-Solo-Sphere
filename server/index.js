@@ -44,6 +44,14 @@ async function run() {
       res.send(job);
     });
 
+    // get jobs by email
+    app.get('/my-jobs', async (req, res) => {
+      const email = req.query?.email;
+      const query = { 'buyer.email': email };
+      const jobs = await jobsCollection.find(query).toArray();
+      res.send(jobs);
+    });
+
     // save a job in db
     app.post('/add-job', async (req, res) => {
       const jobData = req.body;
