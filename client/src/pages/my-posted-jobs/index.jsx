@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../provider/AuthProvider';
@@ -8,18 +7,9 @@ const MyPostedJobs = () => {
   const { user } = useContext(AuthContext);
   const [jobs, setJobs] = useState([]);
 
-  const getData = async () => {
-    try {
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/my-jobs?email=${user?.email}`);
-      setJobs(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
-    getData();
-  }, []);
+    axios.get(`${import.meta.env.VITE_API_URL}/my-jobs?email=${user?.email}`).then((data) => setJobs(data.data));
+  }, [user]);
 
   const handleDelete = (id) => {
     axios
@@ -34,8 +24,7 @@ const MyPostedJobs = () => {
               color: '#fff',
             },
           });
-          // setJobs(jobs.filter((job) => job._id !== id));
-          getData();
+          setJobs(jobs.filter((job) => job._id !== id));
         }
       })
       .catch((error) => {
