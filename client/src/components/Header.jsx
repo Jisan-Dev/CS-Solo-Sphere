@@ -47,7 +47,9 @@ const Header = () => {
             </div>
             <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
               <li>
-                <div className="justify-between">Add Job</div>
+                <NavLink to="/add-job" className="justify-between">
+                  Add Job
+                </NavLink>
               </li>
               <li>
                 <div>My Posted Jobs</div>
