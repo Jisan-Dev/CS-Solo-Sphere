@@ -1,9 +1,11 @@
 import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../provider/AuthProvider';
+import toast from 'react-hot-toast';
 
 const MyBids = () => {
   const [myBids, setMyBids] = useState([]);
+  const [isStatusChanged, setIsStatusChanged] = useState(false);
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
@@ -17,6 +19,35 @@ const MyBids = () => {
     };
     getData();
   }, [user]);
+
+  const handleStatus = async (id, status) => {
+    try {
+      const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}/bids/${id}`, { status });
+      if (data.modifiedCount > 0) {
+        toast.success('Job marked as completed', {
+          style: {
+            borderRadius: '10px',
+            background: '#333',
+            padding: '14px 20px',
+            color: '#fff',
+          },
+        });
+        const updatedBid = myBids.find((bid) => bid._id === id);
+        updatedBid.status = status;
+        setIsStatusChanged(!isStatusChanged);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message, {
+        style: {
+          borderRadius: '10px',
+          background: '#333',
+          padding: '14px 20px',
+          color: '#fff',
+        },
+      });
+    }
+  };
 
   return (
     <section className="container px-4 mx-auto pt-12">
@@ -87,7 +118,11 @@ const MyBids = () => {
                         </div>
                       </td>
                       <td className="px-4 py-4 text-sm whitespace-nowrap">
-                        <button title="Mark Complete" className="text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none disabled:cursor-not-allowed">
+                        <button
+                          onClick={() => handleStatus(bid._id, 'Complete')}
+                          title="Mark Complete"
+                          disabled={bid?.status === 'In Progress'}
+                          className="text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none disabled:cursor-not-allowed">
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
                             <path
                               strokeLinecap="round"
