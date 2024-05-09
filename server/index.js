@@ -45,7 +45,14 @@ async function run() {
     });
 
     app.post('/logout', async (req, res) => {
-      res.clearCookie('token', { maxAge: 0 }).send({ success: true });
+      res
+        .clearCookie('token', {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+          maxAge: 0,
+        })
+        .send({ success: true });
     });
 
     // Get all jobs data
