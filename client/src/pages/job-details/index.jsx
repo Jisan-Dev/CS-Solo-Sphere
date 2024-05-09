@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../provider/AuthProvider';
 import toast from 'react-hot-toast';
 import DatePicker from 'react-datepicker';
@@ -11,6 +11,7 @@ const JobDetails = () => {
   const job = useLoaderData();
   const { _id, job_title, description, deadline, category, min_price, max_price, buyer } = job || {};
   const [startDate, setStartDate] = useState(new Date(deadline));
+  const navigate = useNavigate();
 
   const handleFormSubmission = async (event) => {
     event.preventDefault();
@@ -48,6 +49,7 @@ const JobDetails = () => {
           },
         });
         form.reset();
+        navigate('/my-bids');
       }
     } catch (error) {
       toast.error(error.message, {

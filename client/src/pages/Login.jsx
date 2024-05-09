@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import bgImg from '../assets/images/login.jpg';
 import logo from '../assets/images/logo.png';
 import { useContext } from 'react';
@@ -6,7 +6,12 @@ import { AuthContext } from '../provider/AuthProvider';
 import toast from 'react-hot-toast';
 
 const Login = () => {
-  const { signIn, signInWithGoogle } = useContext(AuthContext);
+  const { signIn, signInWithGoogle, user, loading } = useContext(AuthContext);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state || '/';
+
   const handleSignIn = async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -24,6 +29,7 @@ const Login = () => {
           padding: '14px 20px',
         },
       });
+      navigate(from, { replace: true });
     } catch (err) {
       toast.error(err.code, {
         style: {
@@ -47,6 +53,7 @@ const Login = () => {
           padding: '14px 20px',
         },
       });
+      navigate(from, { replace: true });
     } catch (err) {
       toast.error(err.code, {
         style: {
@@ -59,6 +66,7 @@ const Login = () => {
     }
   };
 
+  if (user || loading) return <Navigate to="/" />;
   return (
     <div className="flex justify-center items-center min-h-[calc(100vh-306px)] py-14">
       <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg  lg:max-w-4xl ">
