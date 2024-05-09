@@ -1,10 +1,12 @@
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../provider/AuthProvider';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const BidRequests = () => {
   const [bidRequests, setBidRequests] = useState([]);
   const { user } = useContext(AuthContext);
+  const [isStatusChanged, setIsStatusChanged] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
@@ -17,6 +19,41 @@ const BidRequests = () => {
     };
     getData();
   }, [user]);
+
+  const handleStatus = async (id, prevStatus, status) => {
+    if (prevStatus === status) return toast.error('sorry action not permitted');
+    try {
+      const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}/bids/${id}`, { status });
+      if (data.modifiedCount > 0) {
+        if (status === 'In Progress') {
+          toast.success('Successfully accepted the request!', {
+            style: {
+              borderRadius: '10px',
+              background: '#333',
+              padding: '14px 20px',
+              color: '#fff',
+            },
+          });
+        }
+        if (status === 'Rejected') {
+          toast.success('Successfully rejected the request!', {
+            style: {
+              borderRadius: '10px',
+              background: '#333',
+              padding: '14px 20px',
+              color: '#fff',
+            },
+          });
+        }
+
+        const updatedBid = bidRequests.find((bid) => bid._id === id);
+        updatedBid.status = status;
+        setIsStatusChanged(!isStatusChanged);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <section className="container px-4 mx-auto pt-12">
@@ -100,9 +137,7 @@ const BidRequests = () => {
                         <div className="flex items-center gap-x-6">
                           {/* Accept Button: In Progress */}
                           <button
-                            // onClick={() =>
-                            //   handleStatus(bid._id, bid.status, 'In Progress')
-                            // }
+                            onClick={() => handleStatus(bid._id, bid.status, 'In Progress')}
                             disabled={bid.status === 'Complete'}
                             className="disabled:cursor-not-allowed text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
@@ -111,9 +146,7 @@ const BidRequests = () => {
                           </button>
                           {/* Reject Button */}
                           <button
-                            // onClick={() =>
-                            //   handleStatus(bid._id, bid.status, 'Rejected')
-                            // }
+                            onClick={() => handleStatus(bid._id, bid.status, 'Rejected')}
                             disabled={bid.status === 'Complete'}
                             className="disabled:cursor-not-allowed text-gray-500 transition-colors duration-200   hover:text-yellow-500 focus:outline-none">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
