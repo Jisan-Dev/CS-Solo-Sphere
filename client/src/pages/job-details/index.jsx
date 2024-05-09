@@ -7,10 +7,10 @@ import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 
 const JobDetails = () => {
-  const [startDate, setStartDate] = useState(new Date());
   const { user } = useContext(AuthContext);
   const job = useLoaderData();
   const { _id, job_title, description, deadline, category, min_price, max_price, buyer } = job || {};
+  const [startDate, setStartDate] = useState(new Date(deadline));
 
   const handleFormSubmission = async (event) => {
     event.preventDefault();

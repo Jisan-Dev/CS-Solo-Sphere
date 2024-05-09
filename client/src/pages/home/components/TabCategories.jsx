@@ -24,7 +24,7 @@ const TabCategories = () => {
         Three categories available for the time being. They are Web Development, Graphics Design and Digital Marketing. Browse them by clicking on the tabs below.
       </p>
       <Tabs>
-        <div className="text-center w-[calc(100%-180px)] mx-auto">
+        <div className="text-center md:w-[calc(100%-180px)] mx-auto">
           <TabList>
             <Tab>Web Development</Tab>
             <Tab>Graphics Design</Tab>
