@@ -9,6 +9,7 @@ import ErrorPage from '../pages/ErrorPage';
 import MyPostedJobs from '../pages/my-posted-jobs';
 import UpdateJob from '../pages/update-job/UpdateJob';
 import MyBids from '../pages/my-bids';
+import BidRequests from '../pages/bid-requests';
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
       {
         path: '/my-bids',
         element: <MyBids />,
+      },
+      {
+        path: '/bid-requests',
+        element: <BidRequests />,
       },
       {
         path: '/update/:id',
