@@ -92,6 +92,14 @@ async function run() {
       res.send(bids);
     });
 
+    //get all bid-requests data by email
+    app.get('/bid-requests', async (req, res) => {
+      const email = req.query?.email;
+      const query = { 'buyer.email': email };
+      const bids = await bidsCollection.find(query).toArray();
+      res.send(bids);
+    });
+
     // patch a bid by id
     app.patch('/bids/:id', async (req, res) => {
       const id = req.params.id;
