@@ -1,17 +1,20 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../provider/AuthProvider';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
 
 const BidRequests = () => {
   const [bidRequests, setBidRequests] = useState([]);
   const { user } = useContext(AuthContext);
   const [isStatusChanged, setIsStatusChanged] = useState(false);
+  const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/bid-requests?email=${user?.email}`);
+        const { data } = await axiosSecure.get(`/bid-requests?email=${user?.email}`);
         setBidRequests(data);
       } catch (error) {
         console.log(error);

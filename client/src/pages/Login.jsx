@@ -2,7 +2,7 @@
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import bgImg from '../assets/images/login.jpg';
 import logo from '../assets/images/logo.png';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { AuthContext } from '../provider/AuthProvider';
 import toast from 'react-hot-toast';
 
@@ -54,7 +54,7 @@ const Login = () => {
           padding: '14px 20px',
         },
       });
-      navigate(from, { replace: true });
+      navigate(from);
     } catch (err) {
       toast.error(err.code, {
         style: {
@@ -67,7 +67,7 @@ const Login = () => {
     }
   };
 
-  if (user) return <Navigate to="/" />;
+  if (user) return;
   return (
     <div className="flex justify-center items-center min-h-[calc(100vh-306px)] py-14">
       <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg  lg:max-w-4xl ">
