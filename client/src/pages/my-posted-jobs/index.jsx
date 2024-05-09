@@ -1,20 +1,22 @@
-import axios from 'axios';
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../provider/AuthProvider';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
 
 const MyPostedJobs = () => {
   const { user } = useContext(AuthContext);
   const [jobs, setJobs] = useState([]);
+  const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_URL}/my-jobs?email=${user?.email}`, { withCredentials: true }).then((data) => setJobs(data.data));
+    axiosSecure.get(`/my-jobs?email=${user?.email}`).then((data) => setJobs(data.data));
   }, [user]);
 
   const handleDelete = async (id) => {
     try {
-      const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}/jobs/${id}`);
+      const { data } = await axiosSecure.delete(`$/jobs/${id}`);
       if (data.deletedCount > 0) {
         toast.success('Deleted Successfully', {
           style: {

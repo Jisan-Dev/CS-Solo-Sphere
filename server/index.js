@@ -20,7 +20,7 @@ app.use(cookieParser());
 // Verify jwt middleware
 const verifyToken = (req, res, next) => {
   const token = req.cookies?.token;
-  // if (!token) return res.status(401).send({ message: 'Access Denied!' });
+  if (!token) return res.status(401).send({ message: 'Access Denied!' });
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
