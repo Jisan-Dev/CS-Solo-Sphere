@@ -9,7 +9,7 @@ const MyPostedJobs = () => {
   const [jobs, setJobs] = useState([]);
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_URL}/my-jobs?email=${user?.email}`).then((data) => setJobs(data.data));
+    axios.get(`${import.meta.env.VITE_API_URL}/my-jobs?email=${user?.email}`, { withCredentials: true }).then((data) => setJobs(data.data));
   }, [user]);
 
   const handleDelete = async (id) => {

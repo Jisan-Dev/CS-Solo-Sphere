@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 const port = process.env.PORT || 5000;
 
@@ -14,6 +15,23 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(cookieParser());
+
+// Verify jwt middleware
+const verifyToken = (req, res, next) => {
+  const token = req.cookies?.token;
+  // if (!token) return res.status(401).send({ message: 'Access Denied!' });
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      console.log(err);
+      return res.status(401).send({ message: 'Not Authorized' });
+    }
+    console.log('values in the token: ', decoded);
+    req.decodedUser = decoded;
+    next();
+  });
+};
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.chn7ebi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -70,7 +88,9 @@ async function run() {
     });
 
     // get jobs by email
-    app.get('/my-jobs', async (req, res) => {
+    app.get('/my-jobs', verifyToken, async (req, res) => {
+      // console.log('user from the valid token, inside /my-jobs api', req.decodedUser);
+      if (req.query?.email !== req.decodedUser?.email) return res.status(403).send({ message: 'Forbidden Access' });
       const email = req.query?.email;
       const query = { 'buyer.email': email };
       const jobs = await jobsCollection.find(query).toArray();
@@ -110,7 +130,8 @@ async function run() {
     });
 
     // get all bids data by email
-    app.get('/my-bids', async (req, res) => {
+    app.get('/my-bids', verifyToken, async (req, res) => {
+      if (req.query?.email !== req.decodedUser?.email) return res.status(403).send({ message: 'Forbidden Access' });
       const email = req.query?.email;
       const query = { email };
       const bids = await bidsCollection.find(query).toArray();
@@ -118,7 +139,8 @@ async function run() {
     });
 
     //get all bid-requests data by email
-    app.get('/bid-requests', async (req, res) => {
+    app.get('/bid-requests', verifyToken, async (req, res) => {
+      if (req.query?.email !== req.decodedUser?.email) return res.status(403).send({ message: 'Forbidden Access' });
       const email = req.query?.email;
       const query = { 'buyer.email': email };
       const bids = await bidsCollection.find(query).toArray();
