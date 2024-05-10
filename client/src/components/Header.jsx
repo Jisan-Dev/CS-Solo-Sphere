@@ -30,6 +30,9 @@ const Header = () => {
           <li>
             <NavLink to={'/'}>Home</NavLink>
           </li>
+          <li>
+            <NavLink to={'/all-jobs'}>All Jobs</NavLink>
+          </li>
 
           {!user && (
             <li>
