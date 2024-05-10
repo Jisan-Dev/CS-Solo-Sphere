@@ -46,7 +46,7 @@ const AllJobs = () => {
   };
 
   return (
-    <div className="container py-10 mx-auto min-h-[calc(100vh-306px)] flex flex-col justify-between">
+    <div className="container px-6 py-10 mx-auto min-h-[calc(100vh-306px)] flex flex-col justify-between">
       <div>
         <div className="flex flex-wrap md:flex-row justify-center items-center max-sm:gap-3 gap-5 ">
           <div>
