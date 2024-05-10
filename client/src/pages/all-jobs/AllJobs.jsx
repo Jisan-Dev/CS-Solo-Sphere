@@ -30,6 +30,13 @@ const AllJobs = () => {
   const numberOfPages = Math.ceil(count / itemsPerPage);
   const pages = [...Array(numberOfPages).keys()].map((element) => element + 1);
 
+  const handleReset = () => {
+    setFilter('');
+    setSort('');
+    // setSearch('')
+    // setSearchText('')
+  };
+
   return (
     <div className="container px-6 py-10 mx-auto min-h-[calc(100vh-306px)] flex flex-col justify-between">
       <div>
@@ -81,7 +88,9 @@ const AllJobs = () => {
               <option value="asc">Ascending Order</option>
             </select>
           </div>
-          <button className="btn">Reset</button>
+          <button onClick={handleReset} className="btn">
+            Reset
+          </button>
         </div>
         <div className="grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {jobs.map((job) => (
