@@ -9,23 +9,25 @@ const AllJobs = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState('');
   const [sort, setSort] = useState('');
+  const [search, setSearch] = useState('');
+  const [searchText, setSearchText] = useState('');
   const [jobs, setJobs] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
-      const { data } = await axios(`${import.meta.env.VITE_API_URL}/all-jobs?page=${currentPage}&size=${itemsPerPage}&filter=${filter}&sort=${sort}`);
+      const { data } = await axios(`${import.meta.env.VITE_API_URL}/all-jobs?page=${currentPage}&size=${itemsPerPage}&filter=${filter}&sort=${sort}&search=${search}`);
       setJobs(data);
     };
     getData();
-  }, [currentPage, itemsPerPage, filter, sort]);
+  }, [currentPage, itemsPerPage, filter, sort, search]);
 
   useEffect(() => {
     const getCount = async () => {
-      const { data } = await axios(`${import.meta.env.VITE_API_URL}/jobs-count?filter=${filter}`);
+      const { data } = await axios(`${import.meta.env.VITE_API_URL}/jobs-count?filter=${filter}&search=${search}`);
       setCount(data.count);
     };
     getCount();
-  }, [filter]);
+  }, [filter, search]);
 
   const numberOfPages = Math.ceil(count / itemsPerPage);
   const pages = [...Array(numberOfPages).keys()].map((element) => element + 1);
@@ -33,8 +35,14 @@ const AllJobs = () => {
   const handleReset = () => {
     setFilter('');
     setSort('');
-    // setSearch('')
+    setSearch('');
+    setSearchText('');
     // setSearchText('')
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setSearch(e.target.search.value);
   };
 
   return (
@@ -58,12 +66,14 @@ const AllJobs = () => {
             </select>
           </div>
 
-          <form>
+          <form onSubmit={handleSearch}>
             <div className="flex p-1 overflow-hidden border rounded-lg    focus-within:ring focus-within:ring-opacity-40 focus-within:border-blue-400 focus-within:ring-blue-300">
               <input
                 className="px-6 py-2 text-gray-700 placeholder-gray-500 bg-white outline-none focus:placeholder-transparent"
                 type="text"
                 name="search"
+                onChange={(e) => setSearchText(e.target.value)}
+                value={searchText}
                 placeholder="Enter Job Title"
                 aria-label="Enter Job Title"
               />
