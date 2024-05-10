@@ -1,19 +1,33 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react';
 import JobCard from '../../pages/home/components/JobCard';
 import axios from 'axios';
 
 const AllJobs = () => {
+  const [itemsPerPage, setItemsPerPage] = useState(4);
+  const [count, setCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [jobs, setJobs] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
-      const { data } = await axios(`${import.meta.env.VITE_API_URL}/jobs`);
+      const { data } = await axios(`${import.meta.env.VITE_API_URL}/all-jobs?page=${currentPage}&size=${itemsPerPage}`);
       setJobs(data);
     };
     getData();
+  }, [currentPage, itemsPerPage]);
+
+  useEffect(() => {
+    const getCount = async () => {
+      const { data } = await axios(`${import.meta.env.VITE_API_URL}/jobs-count`);
+      setCount(data.count);
+    };
+    getCount();
   }, []);
-  console.log(jobs.length);
-  const pages = [1, 2, 3, 4, 5];
+
+  const numberOfPages = Math.ceil(count / itemsPerPage);
+  const pages = [...Array(numberOfPages).keys()].map((element) => element + 1);
+
   return (
     <div className="container px-6 py-10 mx-auto min-h-[calc(100vh-306px)] flex flex-col justify-between">
       <div>
@@ -58,7 +72,9 @@ const AllJobs = () => {
         </div>
       </div>
 
+      {/* Pagination Section */}
       <div className="flex justify-center mt-12">
+        {/* Previous Button */}
         <button className="px-4 py-2 mx-1 text-gray-700 disabled:text-gray-500 capitalize bg-gray-200 rounded-md disabled:cursor-not-allowed disabled:hover:bg-gray-200 disabled:hover:text-gray-500 hover:bg-blue-500  hover:text-white">
           <div className="flex items-center -mx-1">
             <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 mx-1 rtl:-scale-x-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -69,12 +85,17 @@ const AllJobs = () => {
           </div>
         </button>
 
+        {/* Numbers */}
         {pages.map((btnNum) => (
-          <button key={btnNum} className={`hidden px-4 py-2 mx-1 transition-colors duration-300 transform  rounded-md sm:inline hover:bg-blue-500  hover:text-white`}>
+          <button
+            onClick={() => setCurrentPage(btnNum)}
+            key={btnNum}
+            className={`hidden px-4 py-2 mx-1 transition-colors duration-300 transform  rounded-md sm:inline hover:bg-blue-500  hover:text-white`}>
             {btnNum}
           </button>
         ))}
 
+        {/* Next Button */}
         <button className="px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-gray-200 rounded-md hover:bg-blue-500 disabled:hover:bg-gray-200 disabled:hover:text-gray-500 hover:text-white disabled:cursor-not-allowed disabled:text-gray-500">
           <div className="flex items-center -mx-1">
             <span className="mx-1">Next</span>
