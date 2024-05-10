@@ -7,23 +7,24 @@ const AllJobs = () => {
   const [itemsPerPage, setItemsPerPage] = useState(4);
   const [count, setCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [filter, setFilter] = useState('');
   const [jobs, setJobs] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
-      const { data } = await axios(`${import.meta.env.VITE_API_URL}/all-jobs?page=${currentPage}&size=${itemsPerPage}`);
+      const { data } = await axios(`${import.meta.env.VITE_API_URL}/all-jobs?page=${currentPage}&size=${itemsPerPage}&filter=${filter}`);
       setJobs(data);
     };
     getData();
-  }, [currentPage, itemsPerPage]);
+  }, [currentPage, itemsPerPage, filter]);
 
   useEffect(() => {
     const getCount = async () => {
-      const { data } = await axios(`${import.meta.env.VITE_API_URL}/jobs-count`);
+      const { data } = await axios(`${import.meta.env.VITE_API_URL}/jobs-count?filter=${filter}`);
       setCount(data.count);
     };
     getCount();
-  }, []);
+  }, [filter]);
 
   const numberOfPages = Math.ceil(count / itemsPerPage);
   const pages = [...Array(numberOfPages).keys()].map((element) => element + 1);
@@ -33,7 +34,7 @@ const AllJobs = () => {
       <div>
         <div className="flex flex-col md:flex-row justify-center items-center gap-5 ">
           <div>
-            <select name="category" id="category" className="border p-4 rounded-lg">
+            <select onChange={(e) => setFilter(e.target.value)} value={filter} name="category" id="category" className="border p-4 rounded-lg">
               <option value="">Filter By Category</option>
               <option value="Web Development">Web Development</option>
               <option value="Graphics Design">Graphics Design</option>
