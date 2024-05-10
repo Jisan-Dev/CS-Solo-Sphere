@@ -134,6 +134,13 @@ async function run() {
       if (alreadyApplied) return res.status(403).send({ message: 'You have already applied for this job!' });
 
       const result = await bidsCollection.insertOne(bidData);
+
+      // update bid_count in jobs collection
+      const updateDoc = { $inc: { bid_count: 1 } };
+      const jobQuery = { _id: new ObjectId(bidData.jobId) };
+      const updateBidCountResult = await jobsCollection.updateOne(jobQuery, updateDoc);
+      console.log(updateBidCountResult);
+
       res.send(result);
     });
 

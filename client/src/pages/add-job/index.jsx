@@ -24,7 +24,7 @@ const AddJob = () => {
       photoURL: user?.photoURL,
       displayName: user?.displayName,
     };
-    console.log('jobdata', jobData);
+    jobData.bid_count = 0;
     try {
       const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/add-job`, jobData);
       console.log(data);
