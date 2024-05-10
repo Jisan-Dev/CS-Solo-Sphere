@@ -37,12 +37,12 @@ const AllJobs = () => {
     setSort('');
     setSearch('');
     setSearchText('');
-    // setSearchText('')
   };
 
   const handleSearch = (e) => {
     e.preventDefault();
-    setSearch(e.target.search.value);
+    // setSearch(e.target.search.value);
+    setSearch(searchText);
   };
 
   return (
