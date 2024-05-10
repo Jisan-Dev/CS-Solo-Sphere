@@ -26,7 +26,7 @@ const Header = () => {
         </Link>
       </div>
       <div className="flex-none">
-        <ul className="menu menu-horizontal px-1">
+        <ul className="menu menu-horizontal font-bold text-base px-1">
           <li>
             <NavLink to={'/'}>Home</NavLink>
           </li>
@@ -42,12 +42,12 @@ const Header = () => {
         </ul>
 
         {user && (
-          <div className="dropdown dropdown-end z-50">
-            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+          <details className="dropdown dropdown-end font-bold  z-50">
+            <summary tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full" title="">
                 <img referrerPolicy="no-referrer" alt="User Profile Photo" src={user?.photoURL} />
               </div>
-            </div>
+            </summary>
             <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
               <li>
                 <NavLink to="/add-job" className="justify-between">
@@ -69,7 +69,7 @@ const Header = () => {
                 </button>
               </li>
             </ul>
-          </div>
+          </details>
         )}
       </div>
     </div>

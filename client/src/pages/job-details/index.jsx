@@ -28,8 +28,24 @@ const JobDetails = () => {
     const form = event.target;
     const jobId = _id;
     const price = parseFloat(form.price.value);
-    if (price < parseFloat(min_price)) return toast.error('Offer more or at least equal to Minimum Price.');
-    if (price > parseFloat(max_price)) return toast.error('Offer less or at least equal to Maximum Price.');
+    if (price < parseFloat(min_price))
+      return toast.error('Offer more or at least equal to Minimum Price.', {
+        style: {
+          borderRadius: '10px',
+          background: '#333',
+          color: '#fff',
+          padding: '14px 20px',
+        },
+      });
+    if (price > parseFloat(max_price))
+      return toast.error('Offer less or at least equal to Maximum Price.', {
+        style: {
+          borderRadius: '10px',
+          background: '#333',
+          color: '#fff',
+          padding: '14px 20px',
+        },
+      });
     const email = form.email.value;
     const comment = form.comment.value;
     const deadline = startDate;
