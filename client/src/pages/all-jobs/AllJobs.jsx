@@ -34,7 +34,15 @@ const AllJobs = () => {
       <div>
         <div className="flex flex-col md:flex-row justify-center items-center gap-5 ">
           <div>
-            <select onChange={(e) => setFilter(e.target.value)} value={filter} name="category" id="category" className="border p-4 rounded-lg">
+            <select
+              onChange={(e) => {
+                setFilter(e.target.value);
+                setCurrentPage(1);
+              }}
+              value={filter}
+              name="category"
+              id="category"
+              className="border p-4 rounded-lg">
               <option value="">Filter By Category</option>
               <option value="Web Development">Web Development</option>
               <option value="Graphics Design">Graphics Design</option>
