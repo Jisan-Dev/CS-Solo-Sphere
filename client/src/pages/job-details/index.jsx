@@ -52,7 +52,7 @@ const JobDetails = () => {
         navigate('/my-bids');
       }
     } catch (error) {
-      toast.error(error.message, {
+      toast.error(error.response.data.message, {
         style: {
           borderRadius: '10px',
           background: '#333',
