@@ -8,15 +8,16 @@ const AllJobs = () => {
   const [count, setCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState('');
+  const [sort, setSort] = useState('');
   const [jobs, setJobs] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
-      const { data } = await axios(`${import.meta.env.VITE_API_URL}/all-jobs?page=${currentPage}&size=${itemsPerPage}&filter=${filter}`);
+      const { data } = await axios(`${import.meta.env.VITE_API_URL}/all-jobs?page=${currentPage}&size=${itemsPerPage}&filter=${filter}&sort=${sort}`);
       setJobs(data);
     };
     getData();
-  }, [currentPage, itemsPerPage, filter]);
+  }, [currentPage, itemsPerPage, filter, sort]);
 
   useEffect(() => {
     const getCount = async () => {
@@ -66,7 +67,15 @@ const AllJobs = () => {
             </div>
           </form>
           <div>
-            <select name="category" id="category" className="border p-4 rounded-md">
+            <select
+              onChange={(e) => {
+                setSort(e.target.value);
+                setCurrentPage(1);
+              }}
+              value={sort}
+              name="sort"
+              id="sort"
+              className="border p-4 rounded-md">
               <option value="">Sort By Deadline</option>
               <option value="dsc">Descending Order</option>
               <option value="asc">Ascending Order</option>
