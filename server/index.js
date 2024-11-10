@@ -48,6 +48,7 @@ async function run() {
   try {
     const jobsCollection = client.db('soloSphereDB').collection('jobs');
     const bidsCollection = client.db('soloSphereDB').collection('bids');
+    const testimonialsCollection = client.db('soloSphereDB').collection('testimonials');
 
     // Generate JWT
     app.post('/jwt', async (req, res) => {

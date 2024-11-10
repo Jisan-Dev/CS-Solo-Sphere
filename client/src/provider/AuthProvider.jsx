@@ -11,7 +11,7 @@ import {
   updateProfile,
 } from 'firebase/auth';
 import { app } from '../firebase/firebase.config';
-import axios from 'axios';
+// import axios from 'axios';
 
 export const AuthContext = createContext(null);
 const auth = getAuth(app);
@@ -37,7 +37,6 @@ const AuthProvider = ({ children }) => {
   };
 
   const logOut = async () => {
-    setLoading(true);
     return signOut(auth);
   };
 
@@ -55,12 +54,12 @@ const AuthProvider = ({ children }) => {
         setUser(currentUser);
         console.log('CurrentUser-->', currentUser);
         setLoading(false);
-        axios.post(`${import.meta.env.VITE_API_URL}/jwt`, { email: currentUser?.email }, { withCredentials: true }).then((res) => console.log(res.data));
+        // axios.post(`${import.meta.env.VITE_API_URL}/jwt`, { email: currentUser?.email }, { withCredentials: true }).then((res) => console.log(res.data));
       } else {
         setUser(null);
         console.log('CurrentUser-->', currentUser);
         setLoading(false);
-        axios.post(`${import.meta.env.VITE_API_URL}/logout`, {}, { withCredentials: true }).then((res) => console.log(res.data));
+        // axios.post(`${import.meta.env.VITE_API_URL}/logout`, {}, { withCredentials: true }).then((res) => console.log(res.data));
       }
     });
     return () => {
